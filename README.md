@@ -4,12 +4,12 @@ This repository contains a collection of simple JavaScript projects designed for
 
 ## Projects Included
 
-1. **additem.html** - Adds an item to a list dynamically.
+1. **additem.html** - Adds or removes an item to a list.
 2. **changeback.html** - Changes the background color of the page.
 3. **changetxt.html** - Modifies text content dynamically.
 4. **clock.html** - Displays a real-time digital clock.
 5. **counter.html** - Implements a simple counter.
-6. **speech.html** - Uses speech recognition or text-to-speech functionality.
+6. **speech.html** - text-to-speech functionality.
 
 ## How to Use
 
@@ -23,7 +23,7 @@ This repository contains a collection of simple JavaScript projects designed for
 
 - HTML
 - JavaScript
-- CSS (if applicable)
+- CSS 
 
 ## Contributing
 
