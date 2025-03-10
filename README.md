@@ -1,6 +1,3 @@
-Here is a README file for your GitHub project:  
-
-```markdown
 # Simple JS Projects
 
 This repository contains a collection of simple JavaScript projects designed for learning and experimentation.
