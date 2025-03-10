@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text-to-Speech Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        input {
+            width: 60%;
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Text-to-Speech Converter</h1>
+    <input type="text" id="textInput" placeholder="Enter text here..." />
+    <button id="speakButton">Speak</button>
+
+    <script>
+        // Select the input field and button
+        const textInput = document.getElementById("textInput");
+        const speakButton = document.getElementById("speakButton");
+
+        // Event listener for button click
+        speakButton.addEventListener("click", () => {
+            const text = textInput.value.trim();
+            if (!text) return alert("Please enter text to speak!");
+
+            // Create a speech synthesis instance
+            const speech = new SpeechSynthesisUtterance(text);
+            speech.lang = "en-US"; // Language setting
+            speech.rate = 1; // Normal speech rate
+
+            // Speak the text
+            window.speechSynthesis.speak(speech);
+        });
+    </script>
+
+</body>
+</html>

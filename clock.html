@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Clock with Alarm & Calendar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 20px;
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .time {
+            font-size: 40px;
+            font-weight: bold;
+        }
+        .date {
+            font-size: 20px;
+            margin-top: 5px;
+        }
+        .alarm-section {
+            margin-top: 15px;
+        }
+        .calendar {
+            margin-top: 20px;
+            text-align: left;
+            display: inline-block;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        .today {
+            background-color: #f39c12;
+            color: white;
+            font-weight: bold;
+        }
+        button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+        .dark-mode {
+            background: black;
+            color: white;
+        }
+        .dark-mode .container {
+            background: #222;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="time" id="clock">00:00:00 AM</div>
+        <div class="date" id="date">January 1, 2025</div>
+
+        <div class="alarm-section">
+            <label>Set Alarm:</label>
+            <input type="time" id="alarmTime">
+            <label>Ringtone:</label>
+            <select id="ringtone">
+                <option value="https://www.soundjay.com/button/beep-07.wav">Beep</option>
+                <option value="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3">Bell</option>
+                <option value="https://www.soundjay.com/misc/sounds/service-bell-3.mp3">Service Bell</option>
+            </select>
+            <button onclick="setAlarm()">Set Alarm</button>
+            <button onclick="stopAlarm()">Stop Alarm</button>
+            <p id="alarmStatus">No alarm set</p>
+        </div>
+
+        <div class="calendar" id="calendar"></div>
+
+        <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    </div>
+
+    <audio id="alarmSound"></audio>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+            let amPm = hours >= 12 ? "PM" : "AM";
+            
+            let hourFormat = document.body.classList.contains("dark-mode") ? hours : (hours % 12 || 12);
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            
+            document.getElementById("clock").innerHTML = `${hourFormat}:${minutes}:${seconds} ${amPm}`;
+            document.getElementById("date").innerHTML = now.toDateString();
+
+            checkAlarm();
+        }
+
+        let alarmTime = null;
+        let alarmSet = false;
+        let selectedRingtone = "";
+
+        function setAlarm() {
+            alarmTime = document.getElementById("alarmTime").value;
+            selectedRingtone = document.getElementById("ringtone").value;
+            if (alarmTime) {
+                alarmSet = true;
+                document.getElementById("alarmStatus").innerText = `Alarm set for ${alarmTime}`;
+                document.getElementById("alarmSound").src = selectedRingtone;
+            }
+        }
+
+        function stopAlarm() {
+            alarmSet = false;
+            document.getElementById("alarmStatus").innerText = "No alarm set";
+            document.getElementById("alarmSound").pause();
+        }
+
+        function checkAlarm() {
+            if (!alarmSet) return;
+
+            const now = new Date();
+            const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+            if (currentTime === alarmTime) {
+                let alarmSound = document.getElementById("alarmSound");
+                alarmSound.play();
+                alarmSet = false;
+                document.getElementById("alarmStatus").innerText = "Alarm ringing!";
+            }
+        }
+
+        function generateCalendar() {
+            const now = new Date();
+            const month = now.getMonth();
+            const year = now.getFullYear();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            let calendarHTML = `<h3>${now.toLocaleString('default', { month: 'long' })} ${year}</h3>`;
+            calendarHTML += `<table><tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>`;
+
+            let firstDay = new Date(year, month, 1).getDay();
+            let date = 1;
+
+            for (let i = 0; i < 6; i++) {
+                calendarHTML += "<tr>";
+                for (let j = 0; j < 7; j++) {
+                    if (i === 0 && j < firstDay) {
+                        calendarHTML += "<td></td>";
+                    } else if (date > daysInMonth) {
+                        break;
+                    } else {
+                        let todayClass = date === now.getDate() ? "today" : "";
+                        calendarHTML += `<td class="${todayClass}">${date}</td>`;
+                        date++;
+                    }
+                }
+                calendarHTML += "</tr>";
+            }
+
+            calendarHTML += "</table>";
+            document.getElementById("calendar").innerHTML = calendarHTML;
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+        }
+
+        setInterval(updateClock, 1000);
+        generateCalendar();
+    </script>
+
+</body>
+</html>

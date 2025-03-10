@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Background Color</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            transition: background-color 0.5s ease;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            background-color: #333;
+            color: white;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Click to Change Background Color</h1>
+    <button id="colorButton">Change Color</button>
+
+    <script>
+        // Function to generate a random hex color
+        function getRandomColor() {
+            const letters = "0123456789ABCDEF";
+            let color = "#";
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // Event listener for button click
+        document.getElementById("colorButton").addEventListener("click", function () {
+            document.body.style.backgroundColor = getRandomColor();
+        });
+    </script>
+
+    <!-- Backend Script using Node.js -->
+    <script>
+        const http = require("http");
+
+        const server = http.createServer((req, res) => {
+            if (req.url === "/getColor") {
+                res.writeHead(200, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ color: getRandomColor() }));
+            }
+        });
+
+        server.listen(3000, () => console.log("Server running on http://localhost:3000"));
+    </script>
+</body>
+</html>
